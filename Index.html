@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Game</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        #maze-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            background-color: #333;
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 5px;
+        }
+
+        .maze-cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ccc;
+        }
+
+        .wall {
+            background-color: #222;
+        }
+
+        #ball {
+            width: 40px;
+            height: 40px;
+            background-color: #ff5733;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        #finish {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="maze-container">
+        <!-- Maze cells (some are walls) -->
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell wall"></div>
+
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell"></div>
+        <div class="maze-cell wall"></div>
+        <div class="maze-cell" id="finish"></div>
+
+        <!-- Ball -->
+        <div id="ball"></div>
+    </div>
+
+    <script>
+        const ball = document.getElementById("ball");
+        const finish = document.getElementById("finish");
+
+        let isDragging = false;
+
+        // Function to move the ball with finger or mouse
+        function moveBall(event) {
+            if (isDragging) {
+                const mazeRect = document.getElementById("maze-container").getBoundingClientRect();
+                const x = event.touches ? event.touches[0].clientX : event.clientX;
+                const y = event.touches ? event.touches[0].clientY : event.clientY;
+                ball.style.left = `${x - mazeRect.left - ball.offsetWidth / 2}px`;
+                ball.style.top = `${y - mazeRect.top - ball.offsetHeight / 2}px`;
+
+                // Check if the ball has reached the finish
+                const ballRect = ball.getBoundingClientRect();
+                const finishRect = finish.getBoundingClientRect();
+                if (
+                    ballRect.left >= finishRect.left &&
+                    ballRect.right <= finishRect.right &&
+                    ballRect.top >= finishRect.top &&
+                    ballRect.bottom <= finishRect.bottom
+                ) {
+                    window.location.href = "congrats.html"; // Redirect to the congrats page
+                }
+            }
+        }
+
+        // Start dragging
+        ball.addEventListener("mousedown", () => { isDragging = true; });
+        ball.addEventListener("touchstart", () => { isDragging = true; });
+
+        // Move the ball while dragging
+        document.addEventListener("mousemove", moveBall);
+        document.addEventListener("touchmove", moveBall);
+
+        // Stop dragging
+        document.addEventListener("mouseup", () => { isDragging = false; });
+        document.addEventListener("touchend", () => { isDragging = false; });
+    </script>
+
+</body>
+</html>
